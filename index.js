@@ -1,5 +1,6 @@
 const http = require('http')
-    // decoder = require('./m3u8decoder')
+    decoder = require('./m3u8decoder'),
+    fs = require('fs')
 const baseurl = 'http://alcdn.hls.xiaoka.tv/2017915/956/645/J3JZnK6izYwJlpqi'
 const url = baseurl + '/index.m3u8'
 http.get(url, (res) => {
@@ -22,7 +23,10 @@ http.get(url, (res) => {
     })
     res.on('end', () => {        
         try {
-            console.log(rawData)
+            fs.writeFile('r.m3u8',rawData,async err=>{
+                const list =await decoder()
+                console.log(list)
+            })
         } catch (e) {
             errHandler(e)
         }

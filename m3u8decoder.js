@@ -1,17 +1,19 @@
-var m3u8 = require('m3u8');
-var fs   = require('fs');
+const m3u8 = require('m3u8'),
+    fs = require('fs')
 
-var parser = m3u8.createStream();
-var file   = fs.createReadStream('/path/to/file.m3u8');
-file.pipe(parser);
-
-parser.on('item', function(item) {
-  // emits PlaylistItem, MediaItem, StreamItem, and IframeStreamItem
-});
-parser.on('m3u', function(m3u) {
-    var duration = item.get('bandwidth');
-    item.set('uri', 'http://example.com/' + item.get('uri'));
-});
-module.export=function (m3u8) {
-    
+module.exports = function decoder() {
+    return new Promise((resolve, reject) => {
+        const parser = m3u8.createStream()
+        const file = fs.createReadStream('r.m3u8')
+        let playlist=[]
+        file.pipe(parser)
+        parser.on('item', function (item) {
+            playlist.push(item.get('uri'))
+        })
+        parser.on('end',e=>{
+            fs.unlink('r.m3u8')
+            resolve(playlist)
+        })
+        
+    })
 }
