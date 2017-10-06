@@ -1,0 +1,19 @@
+{
+  "name": "yizhibodownloader",
+  "version": "1.0.0",
+  "description": "一直播视频下载",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zertu/yizhibodownloader.git"
+  },
+  "author": "zertu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Zertu/yizhibodownloader/issues"
+  },
+  "homepage": "https://github.com/Zertu/yizhibodownloader#readme"
+}
