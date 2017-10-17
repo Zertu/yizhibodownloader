@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Zertu/yizhibodownloader#readme",
   "devDependencies": {
+    "download": "^6.2.5",
     "m3u8": "0.0.7"
   }
 }
