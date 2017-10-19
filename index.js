@@ -11,7 +11,8 @@ const rl = readline.createInterface({
   })
   
   rl.question('请输入视频的地址:', (answer) => {
-    answer.split('/').pop()
+    answer=answer.split('/')
+    answer.pop()
     const baseurl = answer.join('/')
     const url = baseurl + '/index.m3u8'
     http.get(url, (res) => {
@@ -37,7 +38,9 @@ const rl = readline.createInterface({
                 fs.writeFile('r.m3u8',rawData,async err=>{
                     try{
                         const list =await decoder()
-                        await downloader(baseurl,list)
+                        console.log('下载中')
+                        // await downloader(baseurl,list)
+                        console.log('合并中')
                         await merger(list)
                     }
                     catch (e){
