@@ -2,11 +2,12 @@ const fs = require('fs'),
     download = require('download')
     ,ProgressBar = require('progress')
 module.exports = function downloader(baseUrl, tags) {
-    let lists = []
+    let lists = []    
+    bar = new ProgressBar(':bar', { total: tags.length })
     tags.map(list => lists.push(new Promise(async(resolve, reject) => {
         try{
-            console.info('开始下载'+list)
             const data = await download(baseUrl +'/'+ list)
+            bar.tick()
             console.info(list+'下载完毕')
             resolve(fs.writeFileSync(list,data))
         }

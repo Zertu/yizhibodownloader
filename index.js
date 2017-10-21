@@ -39,7 +39,7 @@ const rl = readline.createInterface({
                     try{
                         const list =await decoder()
                         console.log('下载中')
-                        // await downloader(baseurl,list)
+                        await downloader(baseurl,list)
                         console.log('合并中')
                         await merger(list)
                     }
