@@ -7,7 +7,7 @@ module.exports = function downloader(baseUrl, tags) {
     bar = new ProgressBar(':bar', {total: tags.length})
     tags.map(list => lists.push(new Promise(async(resolve, reject) => {
         let temp =await fileExists(list)
-        if (!temp) {
+        if (temp) {
             resolve(console.info(list + '已存在'))
         } else {
             try {
