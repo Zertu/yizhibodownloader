@@ -11,6 +11,9 @@ const rl = readline.createInterface({
   })
   
   rl.question('请输入视频的地址:', (answer) => {
+    if(!answer.indexOf('https')==0){
+        answer=answer.replace('https','http')
+    }
     answer=answer.split('/')
     answer.pop()
     const baseurl = answer.join('/')
@@ -41,7 +44,7 @@ const rl = readline.createInterface({
                         console.log('下载中')
                         await downloader(baseurl,list)
                         console.log('合并中')
-                        await merger(list)
+                        // await merger(list)
                     }
                     catch (e){
                         errHandler(e)
