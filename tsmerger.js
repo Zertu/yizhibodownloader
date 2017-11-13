@@ -1,35 +1,32 @@
-const fs = require('fs'),
-    cleanCache = require('./cleanCache')
-module.exports = function merger(filelist) {
+const fs = require('fs')
+cleanCache = require('./cleanCache'),
+path=require('path')
+ const{spawn} = require('child_process')
+module.exports = function merger(list) {
     return new Promise(async(resolve, reject) => {
-        fs.writeFileSync('new.ts', '')
-        readFile(filelist, 0)
+        let filelist = []
+        list.map(l => {
+            filelist.push('file ' + l)
+        })
+        fs.writeFileSync('filelist.txt', filelist.join('\n'))
+        fs.writeFileSync('my.bat', 'ffmpeg -f concat -i filelist.txt -c copy output.mp4 -y')
+        const bat = spawn('my.bat')
+
+        bat
+            .stdout
+            .on('data', (data) => {
+                console.log(data.toString());
+            })
+
+        bat
+            .stderr
+            .on('data', (data) => {
+                console.log(data.toString());
+            })
+        bat.on('exit', (code) => {
+            console.log(`子进程退出码：${code}`)
+
+            resolve(cleanCache(list))
+        })
     })
-}
-
-function readFile(filelist, count) {
-    fs.readFile(filelist[count], function (err, data) {
-        if (err) {
-            errorhandler(err)
-        } else {
-            appendFile(data)
-            count++
-            if (count >= filelist.length) {
-                return cleanCache(filelist)
-            }
-            readFile(filelist, count)
-        }
-    });
-}
-
-function appendFile(context) {
-    fs.appendFile('new.ts', context, function (err) {
-        if (err) {
-            errorhandler(err)
-        }
-    })
-}
-
-function errorhandler(err) {
-    console.error('合成文件失败:' + err)
 }
