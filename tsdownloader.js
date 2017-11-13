@@ -6,21 +6,25 @@ const fs = require('fs'),
 module.exports = async function downloader(baseUrl, tags,callback) {
     const limit = config.limit,
         group = tags.length / limit,
-        tasks = []
+        tasks = [],
+        tag=tags
     for (let i = 1; i < group; i++) {
-        tasks.push(tags.splice(0, limit))
+        tasks.push(tag.splice(0, limit))
     }
-    tasks.push(tags)
+    tasks.push(tag)
     
     series(tasks,baseUrl,callback)
 }
 
 function series(item,baseUrl,cb) {
-    let temp =item.splice(0,1)
+    if(!item.length){
+        return cb()
+    }
+    let temp = item.splice(0,1)
     if(item) {
         task(temp[0],baseUrl, function(result) {
-        return series(item,baseUrl),cb;
-      });
+        return series(item,baseUrl,cb)
+      })
     } else {
       return cb()
     }
@@ -34,6 +38,9 @@ function series(item,baseUrl,cb) {
 
 async function downloader(baseUrl,file) {
     let tasks=[]
+    if(!file){
+        return
+    }
     for(let i =0;i<file.length;i++){
         tasks.push(new Promise(async(resolve, reject) => {
             let temp = await fileExists(file[i])

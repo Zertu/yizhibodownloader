@@ -37,11 +37,18 @@ let http = require('http')
                 try {
                     fs.writeFile('r.m3u8', rawData, async err => {
                         try {
-                            const list = await decoder()
+                            let list = await decoder(),
+                            length=list.length
+                            let filelist = []
+                            list.map(l => {
+                                filelist.push('file ' + l)
+                            })
+                            fs.writeFileSync('filelist.txt', filelist.join('\n'))
                             console.log('下载中')
                             downloader(baseurl, list, async function () {
-                                await merger(list)
                                 console.log('合并中')
+                                list = await decoder()
+                                await merger(list)
                             })
                         } catch (e) {
                             errHandler(e)

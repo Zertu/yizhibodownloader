@@ -11,7 +11,6 @@ module.exports = function decoder() {
             playlist.push(item.get('uri'))
         })
         parser.on('end',e=>{
-            fs.unlink('r.m3u8')
             resolve(playlist)
         })
         
