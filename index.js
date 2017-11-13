@@ -1,23 +1,25 @@
-const http = require('http')
-    decoder = require('./m3u8decoder'),
-    fs = require('fs'),
-    downloader= require('./tsdownloader'),
-    merger=require('./tsmerger'),
-    readline = require('readline')
+let http = require('http')
     
-const rl = readline.createInterface({
+const 
+readline = require('readline'),
+rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
-  })
+  }),
+  decoder = require('./m3u8decoder'),
+  fs = require('fs'),
+  downloader= require('./tsdownloader'),
+  merger=require('./tsmerger')
   
   rl.question('请输入视频的地址:', (answer) => {
-    if(!answer.indexOf('https')==0){
-        answer=answer.replace('https','http')
+    if(answer.indexOf('https')==0){
+        http=require('https')
     }
     answer=answer.split('/')
     answer.pop()
     const baseurl = answer.join('/')
     const url = baseurl + '/index.m3u8'
+    console.log(url)
     http.get(url, (res) => {
         const {statusCode} = res
         const contentType = res.headers['content-type']
@@ -42,9 +44,10 @@ const rl = readline.createInterface({
                     try{
                         const list =await decoder()
                         console.log('下载中')
-                        await downloader(baseurl,list)
+                        downloader(baseurl,list,async function () { 
                         console.log('合并中')
-                        // await merger(list)
+                        await merger(list)
+                         })
                     }
                     catch (e){
                         errHandler(e)
